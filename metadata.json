@@ -1,0 +1,6 @@
+{
+  "name": "OSRS GE Merch Scout",
+  "description": "Your Old School RuneScape Grand Exchange item discovery, flipping scanner, and merchanting assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
