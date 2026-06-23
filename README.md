@@ -13,10 +13,10 @@ Categories: High-volume staples (runes, arrows, food), mid-tier (hides, potions,
 
 Popular Flip Categories (as of mid-2026): Ammo (arrows/darts/bolts), runes, hides, bones, potions (e.g., Bones to Peaches), ornament kits, and high-demand skilling/PvM supplies. Always verify current margins on sites like GE Tracker, Flipping.gg, or prices.runescape.wiki.
 Made-Up Trading Algorithm: "Merch Momentum + Margin Hunter" (v1.0)
-This is a fictional but plausible algo you could implement in Python (using APIs like prices.runescape.wiki or weirdgloop.org for historical data). It combines technical analysis (momentum/trends), fundamental (volume & utility), and arbitrage logic.
+This is trading algo you could implement in Python (using APIs like prices.runescape.wiki or weirdgloop.org for historical data). It combines technical analysis (momentum/trends), fundamental (volume & utility), and arbitrage logic.
 Core Logic (Pseudo-Code Style)
 
-Data Ingestion:
+Data Ingestion: Concept
 
    * Fetch latest high/low prices, 24h/7d/30d history, and volume for all (or filtered) items.
    * Compute: Current margin % = ((Instant Sell Price - Instant Buy Price) / Instant Buy Price) * 100. Adjust for GE tax.
