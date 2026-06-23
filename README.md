@@ -2,8 +2,6 @@
 
 **Your Old School RuneScape Grand Exchange item discovery and flipping assistant.**
 
-![Banner](https://via.placeholder.com/800x200?text=OSRS+GE+Merch+Scout) <!-- Replace with a real screenshot or OSRS-themed banner -->
-
 **Live Demo:** [https://osrs-ge-merch-scout-459718744467.us-west2.run.app](https://osrs-ge-merch-scout-459718744467.us-west2.run.app)
 
 ---
