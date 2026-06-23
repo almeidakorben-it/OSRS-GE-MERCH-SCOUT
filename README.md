@@ -1,73 +1,109 @@
-Site: https://osrs-ge-merch-scout-459718744467.us-west2.run.app
-Purpose and use case: 
+# OSRS GE Merch Scout
 
-Key Features
+**Your Old School RuneScape Grand Exchange item discovery and flipping assistant.**
 
-Live Market Scanner: Filters thousands of items by criteria like margin %, daily volume, volatility, buy/sell ratio, and trade limits.
-Trend Analyzer: Detects items with stable or upward price patterns (e.g., W-shaped graphs indicating recovery) and flags crashes or spikes.
-Profit Calculator: Estimates GP/hour after GE tax (typically ~1-5% depending on item value), buy limits, and holding time.
-Risk Meter: Scores items on liquidity (high volume = safer), competition, and manipulation risk.
-Alerts: Notifications for sudden dips, high margins, or volume surges (e.g., post-update demand for new content items).
-Portfolio Tracker: Logs your active flips, tracks P/L, and suggests when to cash out.
-Categories: High-volume staples (runes, arrows, food), mid-tier (hides, potions, skilling supplies), and low-volume/high-margin (boss uniques, ornament kits).
+![Banner](https://via.placeholder.com/800x200?text=OSRS+GE+Merch+Scout) <!-- Replace with a real screenshot or OSRS-themed banner -->
 
-Popular Flip Categories (as of mid-2026): Ammo (arrows/darts/bolts), runes, hides, bones, potions (e.g., Bones to Peaches), ornament kits, and high-demand skilling/PvM supplies. Always verify current margins on sites like GE Tracker, Flipping.gg, or prices.runescape.wiki.
-Made-Up Trading Algorithm: "Merch Momentum + Margin Hunter" (v1.0)
-This is trading algo you could implement in Python (using APIs like prices.runescape.wiki or weirdgloop.org for historical data). It combines technical analysis (momentum/trends), fundamental (volume & utility), and arbitrage logic.
-Core Logic (Pseudo-Code Style)
+**Live Demo:** [https://osrs-ge-merch-scout-459718744467.us-west2.run.app](https://osrs-ge-merch-scout-459718744467.us-west2.run.app)
 
-Data Ingestion: Concept
+---
 
-   * Fetch latest high/low prices, 24h/7d/30d history, and volume for all (or filtered) items.
-   * Compute: Current margin % = ((Instant Sell Price - Instant Buy Price) / Instant Buy Price) * 100. Adjust for GE tax.
+## Purpose & Use Case
 
-Scoring System (total score 0-100; threshold > 65 for "good deal"):
+GE Merch Scout scans the Grand Exchange market in real-time (or via periodic pulls) to identify high-potential merchandising opportunities. It focuses on **flipping** (buy low, sell high within hours/days) and light **merchanting** (holding trending items for short-to-medium term gains).
 
-   * Margin Score (0-30): Higher % = better. Bonus for >5-15% on liquid items. Penalty for <2%.
-   * Volume Score (0-25): High daily volume (>10k-100k+ trades) for fast turnover. Low volume only if margin is exceptional.
-   * Momentum Score (0-25):
-     * Check recent price trend (e.g., 7-day moving average slope positive or recovering from dip).
-     * Detect "W" patterns or steady upward drift (good for flipping/investing).
-     * Bonus for post-update demand spikes (e.g., new boss drops or meta shifts).
-   * Liquidity & Risk Score (0-10): Buy limit compatibility, price stability (low volatility), and demand drivers (PvM, skilling, PvP use).
-   * Opportunity Score (0-10): Compare to 30-day average price. Flag items trading below historical mean with rising volume.
+Pulls live prices, historical data, volume, and margins from reliable sources like the [OSRS Wiki / RuneLite Real-Time Prices API](https://prices.runescape.wiki/).
 
-Deal Ranking & Filtering:
+Perfect for:
+- Active flippers looking for quick margins
+- Merchants tracking meta shifts and post-update demand
+- Beginners wanting data-driven recommendations with risk scoring
 
-   * Sort by combined score, then by projected GP/hour.
-   * Filters:
-     * Min volume threshold (e.g., avoid dead items with "?" uncertainty).
-     * Max holding time (e.g., prefer <48h flips for beginners).
-     * Diversification: Max 20-30% of capital per item.
-   * Recipe/Combo Bonus: Detect profitable crafting/repair flips (e.g., buy broken items, repair, sell).
+---
 
-Execution Rules:
+## ✨ Key Features
 
-   * Buy at or below calculated "safe buy" (low price + small buffer).
-   * Sell at "target sell" (high price - buffer for speed).
-   * Auto-recommend undercutting by 1-5% based on order book if data available.
-   * Stop-loss: Sell if price drops >8-10% unexpectedly.
-   * Daily refresh: Re-scan every 15-60 mins during active hours.
-Example Output for a Hypothetical Scan
+- **Live Market Scanner** — Filters thousands of items by margin %, daily volume, volatility, buy/sell ratio, and trade limits.
+- **Trend Analyzer** — Detects stable/upward price patterns (e.g., W-shaped recovery graphs) and flags crashes or spikes.
+- **Profit Calculator** — Estimates GP/hour after GE tax (~1-5%), buy limits, and holding time.
+- **Risk Meter** — Scores items on liquidity (high volume = safer), competition, and manipulation risk.
+- **Alerts** — Notifications for sudden dips, high margins, or volume surges (e.g., new content demand).
+- **Portfolio Tracker** — Logs active flips, tracks P/L, and suggests cash-out timing.
+- **Categorized Views** — High-volume staples, mid-tier, low-volume/high-margin items.
 
-Top Pick: Rune Arrows – Margin 8%, High volume, Steady demand from PvM/PvP. Projected 5-10M GP/day with good capital.
-Emerging: Specific ornament kit showing upward momentum after a meta shift.
-Warning: Low-volume rare with huge margin but high risk of stagnation. 1. Official / Best Real-Time API (Recommended)
+### Popular Flip Categories (mid-2026)
+**Ammo** (arrows/darts/bolts), **runes**, **hides**, **bones**, **potions** (e.g. Bones to Peaches), **ornament kits**, and high-demand skilling/PvM supplies.
 
-  * Endpoint: https://prices.runescape.wiki/api/v1/osrs
-  * Source: OSRS Wiki + RuneLite partnership (very reliable, updated frequently).
-  Key Endpoints:
-  * Latest prices: https://prices.runescape.wiki/api/v1/osrs/latest Returns current high/low prices and timestamps for many items.
-  * Mapping (item list): https://prices.runescape.wiki/api/v1/osrs/mapping Gets all item IDs, names, limits, etc.
-  * Time series / History for a specific item: https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=5m&id=ITEM_ID (Common timesteps: 5m, 1h, 6h, 24h, etc.)
-  Example (curl or browser):
-  text
-   &nbsp;&nbsp;https://prices.runescape.wiki/api/v1/osrs/latest &nbsp;&nbsp;
-  Or for a specific item (e.g., Rune Scimitar ID 1289):
-  text
-   &nbsp;&nbsp;https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=1h&id=1289 &nbsp;&nbsp;
-  2. Weird Gloop API (Great for Historical Data)
-  * Base: https://api.weirdgloop.org/
-  * Example: https://api.weirdgloop.org/exchange/history/osrs/all?id=ITEM_ID Good for longer price/volume history.
-  3. Official Jagex GE Page (Daily data)
-  * https://secure.runescape.com/m=itemdb_oldschool/ Top risers/fallers, most traded, etc. (Less developer-friendly but useful for quick checks).
+> **Always verify current margins** on [GE Tracker](https://www.ge-tracker.com/), [Flipping.gg](https://flipping.gg/), or [prices.runescape.wiki](https://prices.runescape.wiki/).
+
+---
+
+## 📊 Trading Algorithm: "Merch Momentum + Margin Hunter" (v1.0)
+
+A plausible, implementable algorithm combining technical analysis, fundamentals, and arbitrage logic. (See the included Python script for a working version.)
+
+### Core Logic
+
+**Data Ingestion**
+- Fetch latest high/low prices, 24h/7d/30d history, and volume.
+- Margin % = `((Sell Price - Buy Price) / Buy Price) * 100`, adjusted for GE tax.
+
+**Scoring System** (Total 0-100; >65 = good deal)
+
+| Component              | Weight | Description |
+|------------------------|--------|-----------|
+| **Margin Score**       | 0-30   | Higher % = better. Bonus for liquid items (5-15%+). |
+| **Volume Score**       | 0-25   | Favors high daily volume for fast turnover. |
+| **Momentum Score**     | 0-25   | 7-day MA slope, W-patterns, recovery, post-update spikes. |
+| **Liquidity & Risk**   | 0-10   | Buy limits, stability, demand drivers (PvM/skilling/PvP). |
+| **Opportunity Score**  | 0-10   | Below 30-day average with rising volume. |
+
+**Deal Ranking & Filtering**
+- Sort by total score → projected GP/hour.
+- Min volume, max holding time (<48h for beginners), diversification (≤20-30% capital per item).
+- Recipe/Combo bonuses for crafting/repair flips.
+
+**Execution Rules**
+- Buy at or below "safe buy" price.
+- Sell at "target sell" with undercutting recommendations.
+- Stop-loss: >8-10% drop.
+- Re-scan every 15-60 minutes.
+
+---
+
+## Example Output (Hypothetical Scan)
+
+- **Top Pick**: Rune Arrows — Margin 8%, High volume, Steady PvM/PvP demand. Projected **5-10M GP/day**.
+- **Emerging**: Specific ornament kit with upward momentum after meta shift.
+- **Warning**: Low-volume rare with huge margin but stagnation risk.
+
+---
+
+## 🛠️ APIs & Data Sources
+
+### 1. Official / Best Real-Time API (Recommended)
+- **Base**: `https://prices.runescape.wiki/api/v1/osrs`
+- **Source**: OSRS Wiki + RuneLite partnership (highly reliable).
+
+**Key Endpoints**:
+- Latest prices: [`/latest`](https://prices.runescape.wiki/api/v1/osrs/latest)
+- Item mapping: [`/mapping`](https://prices.runescape.wiki/api/v1/osrs/mapping)
+- Timeseries: [`/timeseries?timestep=1h&id=1289`](https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=1h&id=1289)  
+  (timesteps: `5m`, `1h`, `6h`, `24h`, etc.)
+
+### 2. Weird Gloop API (Excellent historical data)
+- Base: `https://api.weirdgloop.org/`
+- Example: `https://api.weirdgloop.org/exchange/history/osrs/all?id=ITEM_ID`
+
+### 3. Official Jagex GE Page
+- [https://secure.runescape.com/m=itemdb_oldschool/](https://secure.runescape.com/m=itemdb_oldschool/) — Top risers/fallers, most traded.
+
+---
+
+## Installation & Usage
+
+```bash
+git clone https://github.com/yourusername/osrs-ge-merch-scout.git
+cd osrs-ge-merch-scout
+pip install -r requirements.txt
+python ge_merch_scout.py
