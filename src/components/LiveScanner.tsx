@@ -146,7 +146,7 @@ export default function LiveScanner({
         </div>
 
         {/* Categories Tab Bar */}
-        <div className="flex gap-1 overflow-x-auto pb-1.5 border-b border-slate-800/80 scrollbar-thin">
+        <div className="flex flex-wrap gap-1 pb-1.5 border-b border-slate-800/80">
           {[
             { id: "all", label: "All Opportunities" },
             { id: "staples", label: "🔑 Staples" },
@@ -257,7 +257,7 @@ export default function LiveScanner({
       </div>
 
       {/* Scanner Opportunity Table */}
-      <div className="flex-1 overflow-y-auto min-h-[400px] border border-slate-800 rounded-lg bg-slate-950 scrollbar-thin">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-[400px] border border-slate-800 rounded-lg bg-slate-950 scrollbar-thin">
         {sortedDeals.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-12 text-center text-slate-500">
             <Info className="w-8 h-8 text-slate-700 mb-2 animate-bounce" />
@@ -265,35 +265,35 @@ export default function LiveScanner({
             <p className="text-xs text-slate-600 mt-1">Try relaxing your scores or price budget filters.</p>
           </div>
         ) : (
-          <table className="w-full text-left text-xs text-slate-300">
+          <table className="w-full table-fixed text-left text-xs text-slate-300">
             <thead className="bg-slate-900 text-slate-400 font-semibold border-b border-slate-800 sticky top-0 z-10 text-[11px]">
               <tr>
-                <th className="py-2.5 px-3 w-10 text-center">Star</th>
-                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none" onClick={() => handleSort("name")}>
+                <th className="py-2.5 px-3 w-[8%] text-center">Star</th>
+                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none w-[36%]" onClick={() => handleSort("name")}>
                   <div className="flex items-center gap-1">
                     Item
                     <ArrowUpDown className="w-3 h-3 text-slate-500" />
                   </div>
                 </th>
-                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right" onClick={() => handleSort("score")}>
+                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right w-[14%]" onClick={() => handleSort("score")}>
                   <div className="flex items-center justify-end gap-1">
                     Score
                     <ArrowUpDown className="w-3 h-3 text-slate-500" />
                   </div>
                 </th>
-                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right" onClick={() => handleSort("netMargin")}>
+                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right w-[16%]" onClick={() => handleSort("netMargin")}>
                   <div className="flex items-center justify-end gap-1">
                     Net Margin
                     <ArrowUpDown className="w-3 h-3 text-slate-500" />
                   </div>
                 </th>
-                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right" onClick={() => handleSort("marginPercent")}>
+                <th className="py-2.5 px-2 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right w-[14%]" onClick={() => handleSort("marginPercent")}>
                   <div className="flex items-center justify-end gap-1">
                     Margin % 
                     <ArrowUpDown className="w-3 h-3 text-slate-500" />
                   </div>
                 </th>
-                <th className="py-2.5 px-3 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right" onClick={() => handleSort("limit")}>
+                <th className="py-2.5 px-3 cursor-pointer hover:bg-slate-850 hover:text-white select-none text-right w-[12%]" onClick={() => handleSort("limit")}>
                   <div className="flex items-center justify-end gap-1">
                     Limit
                     <ArrowUpDown className="w-3 h-3 text-slate-500" />
