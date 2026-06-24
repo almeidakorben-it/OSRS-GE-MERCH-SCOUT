@@ -19,7 +19,7 @@ Perfect for:
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 - **Live Market Scanner** — Filters thousands of items by margin %, daily volume, volatility, buy/sell ratio, and trade limits.
 - **Trend Analyzer** — Detects stable/upward price patterns (e.g., W-shaped recovery graphs) and flags crashes or spikes.
@@ -36,7 +36,7 @@ Perfect for:
 
 ---
 
-## 📊 Trading Algorithm: "Merch Momentum + Margin Hunter" (v1.0)
+## Trading Algorithm: "Merch Momentum + Margin Hunter" (v1.0)
 
 A plausible, implementable algorithm combining technical analysis, fundamentals, and arbitrage logic. (See the included Python script for a working version.)
 
