@@ -36,13 +36,13 @@ export default function AdvisorChat({ activeAlgoId = "momentum" }: AdvisorChatPr
       } else {
         setMessages((prev) => [
           ...prev,
-          { sender: "advisor", text: "My merchanting contacts failed to reply. Please verify your connection or secrets panel." },
+          { sender: "advisor", text: `My merchanting contacts failed to reply. Details: ${data.error || "Unknown API error"}` },
         ]);
       }
-    } catch (err) {
+    } catch (err: any) {
       setMessages((prev) => [
         ...prev,
-        { sender: "advisor", text: "Alas! The Grand Exchange servers appear congested. Please check server logs or credentials." },
+        { sender: "advisor", text: `Alas! The Grand Exchange servers encountered an error: ${err?.message || err}` },
       ]);
     } finally {
       setLoading(false);

@@ -84,10 +84,10 @@ export default function Portfolio({
       if (data.success) {
         setAIReview(data.advice);
       } else {
-        setAIReview("The advisor was unable to review your portfolio at this moment.");
+        setAIReview(`The advisor was unable to review your portfolio at this moment. Details: ${data.error || "Unknown API error"}`);
       }
-    } catch (e) {
-      setAIReview("Error connecting to Advisor. Please verify endpoint caches.");
+    } catch (e: any) {
+      setAIReview(`Error connecting to Advisor. Please verify endpoint caches: ${e?.message || e}`);
     } finally {
       setLoadingAI(false);
     }

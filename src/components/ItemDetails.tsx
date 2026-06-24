@@ -68,16 +68,16 @@ export default function ItemDetails({ item, onAddToPortfolio, activeAlgoId = "mo
       const response = await fetch("/api/gemini/advisor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item }),
+        body: JSON.stringify({ item, activeAlgoId }),
       });
       const data = await response.json();
       if (data.success) {
         setAdvice(data.advice);
       } else {
-        setAdvice("Failed to summon the Wise Merchant Advisor. Please check network connections.");
+        setAdvice(`Failed to summon the Wise Merchant Advisor. Details: ${data.error || "Unknown API error"}`);
       }
-    } catch (err) {
-      setAdvice("Error compiling market advice. Verify server states.");
+    } catch (err: any) {
+      setAdvice(`Error compiling market advice. Verify server states: ${err?.message || err}`);
     } finally {
       setGeneratingAdvice(false);
     }

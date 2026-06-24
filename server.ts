@@ -185,10 +185,23 @@ Give tactical instructions on whether to Hold, undercut to Sell, Panic Sell, or 
       prompt = "Give a short, helpful master-merchant OSRS general flipping advice quote!";
     }
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: prompt,
-    });
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents: prompt,
+      });
+    } catch (primaryError: any) {
+      console.warn("Primary model gemini-3.5-flash failed, trying fallback model gemini-2.5-flash...", primaryError);
+      try {
+        response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: prompt,
+        });
+      } catch (fallbackError: any) {
+        throw new Error(`AI generation failed. (Primary model gemini-3.5-flash error: ${primaryError.message}. Fallback model gemini-2.5-flash error: ${fallbackError.message})`);
+      }
+    }
 
     res.json({ success: true, advice: response.text });
   } catch (error: any) {
