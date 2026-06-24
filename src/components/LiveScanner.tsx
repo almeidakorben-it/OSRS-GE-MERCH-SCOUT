@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { OSRSItem, ScannedDeal } from "../types";
-import { gradeOSRSDeal } from "../utils/algo";
+import { OSRSItem, ScannedDeal, TradingAlgoId } from "../types";
+import { gradeOSRSDeal, TRADING_ALGORITHMS } from "../utils/algo";
 import { Search, SlidersHorizontal, ArrowUpDown, Shield, Flame, Star, Coins, Info } from "lucide-react";
 
 interface LiveScannerProps {
@@ -9,6 +9,10 @@ interface LiveScannerProps {
   selectedItemId: number | null;
   starredIds: number[];
   onToggleStar: (itemId: number) => void;
+  activeAlgoId: TradingAlgoId;
+  setActiveAlgoId: (id: TradingAlgoId) => void;
+  customWeights: Record<string, number>;
+  setCustomWeights: (weights: Record<string, number>) => void;
 }
 
 export default function LiveScanner({
@@ -17,6 +21,10 @@ export default function LiveScanner({
   selectedItemId,
   starredIds,
   onToggleStar,
+  activeAlgoId,
+  setActiveAlgoId,
+  customWeights,
+  setCustomWeights,
 }: LiveScannerProps) {
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,7 +49,7 @@ export default function LiveScanner({
   // Grade the items and filter them
   const deals = useMemo(() => {
     return items
-      .map((item) => gradeOSRSDeal(item))
+      .map((item) => gradeOSRSDeal(item, undefined, activeAlgoId, customWeights))
       .filter((deal) => {
         // 1. Search term
         const nameMatch = deal.item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -115,6 +123,8 @@ export default function LiveScanner({
     }
   };
 
+  const activeAlgo = TRADING_ALGORITHMS.find((a) => a.id === activeAlgoId) || TRADING_ALGORITHMS[0];
+
   const currentCategoryLabel = {
     all: "All Scanned Items",
     staples: "High-Volume Staples (Runes, Ammo)",
@@ -129,7 +139,7 @@ export default function LiveScanner({
       <div className="flex flex-col gap-4 mb-4">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-display">
-            <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <svg className="w-4 h-4 text-amber-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             Live Market Scanner
           </h2>
           <button
@@ -166,6 +176,101 @@ export default function LiveScanner({
               {tab.label}
             </button>
           ))}
+        </div>
+
+        {/* Active Algorithmic Strategy Selector */}
+        <div className="bg-slate-950/65 border border-slate-800/85 rounded-2xl p-4 flex flex-col gap-3 shadow-inner">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/60 pb-3">
+            <div>
+              <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest block">Core Pricing Intelligence Model</span>
+              <span className="text-xs text-slate-200 font-bold flex items-center gap-2 mt-1">
+                <span className="text-base">{activeAlgo.emoji}</span> {activeAlgo.name} 
+                <span className="text-[9px] text-amber-500 font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">{activeAlgo.style}</span>
+              </span>
+            </div>
+            
+            <div className="relative">
+              <select
+                value={activeAlgoId}
+                onChange={(e) => setActiveAlgoId(e.target.value as any)}
+                className="bg-slate-900 hover:bg-slate-850 text-white font-bold text-xs rounded-xl px-3.5 py-2 border border-slate-800 hover:border-slate-700 transition-colors cursor-pointer outline-none w-full sm:w-[230px]"
+              >
+                {TRADING_ALGORITHMS.map((algo) => (
+                  <option key={algo.id} value={algo.id}>
+                    {algo.emoji} {algo.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="text-[11px] text-slate-400 leading-relaxed">
+            <p className="font-semibold text-slate-300">{activeAlgo.description}</p>
+            <div className="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] bg-slate-950/45 p-2.5 rounded-xl border border-slate-900 font-mono">
+              <div>
+                <span className="text-slate-500 uppercase font-bold">Target Items:</span>{" "}
+                <span className="text-slate-300">{activeAlgo.targetItems}</span>
+              </div>
+              <div>
+                <span className="text-amber-500/80 uppercase font-bold">Best Suited For:</span>{" "}
+                <span className="text-slate-300">{activeAlgo.bestFor}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hybrid Ensemble Slider Weights Panel */}
+          {activeAlgoId === 'ensemble' && (
+            <div className="mt-1 p-3 bg-slate-950/80 rounded-xl border border-slate-850 flex flex-col gap-2.5">
+              <div className="flex justify-between items-center border-b border-slate-800/40 pb-1.5">
+                <span className="text-[10px] text-amber-500 font-black uppercase tracking-wider">Custom Strategy Consensus Weights</span>
+                <button 
+                  onClick={() => setCustomWeights({
+                    momentum: 1,
+                    reversion: 1,
+                    volume: 1,
+                    seasonal: 1,
+                    lurker: 1,
+                    arbitrage: 1,
+                  })}
+                  className="text-[9px] text-slate-500 hover:text-white uppercase font-bold tracking-wider cursor-pointer"
+                >
+                  Reset Equal
+                </button>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-[10px]">
+                {[
+                  { id: 'momentum', label: '📈 Momentum' },
+                  { id: 'reversion', label: '🔄 Reversion' },
+                  { id: 'volume', label: '⚡ Volume Surge' },
+                  { id: 'seasonal', label: '📅 Seasonal' },
+                  { id: 'lurker', label: '🕵️ Lurker' },
+                  { id: 'arbitrage', label: '⚗️ Arbitrage' },
+                ].map((wt) => (
+                  <div key={wt.id} className="flex flex-col gap-1.5 bg-slate-900/30 p-2 rounded-lg border border-slate-850">
+                    <div className="flex justify-between font-mono">
+                      <span className="text-slate-400 font-bold">{wt.label}</span>
+                      <span className="text-amber-500 font-black">x{customWeights[wt.id] ?? 1}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="4"
+                      step="1"
+                      value={customWeights[wt.id] ?? 1}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        setCustomWeights({
+                          ...customWeights,
+                          [wt.id]: val
+                        });
+                      }}
+                      className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-500"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Expanded Filters panel */}

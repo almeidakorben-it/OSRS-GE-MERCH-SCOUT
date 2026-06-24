@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Sparkles, Send, HelpCircle, Coins, MessageSquare } from "lucide-react";
 
-export default function AdvisorChat() {
+interface AdvisorChatProps {
+  activeAlgoId?: string;
+}
+
+export default function AdvisorChat({ activeAlgoId = "momentum" }: AdvisorChatProps) {
   const [messages, setMessages] = useState<Array<{ sender: "user" | "advisor"; text: string }>>([
     {
       sender: "advisor",
@@ -24,7 +28,7 @@ export default function AdvisorChat() {
       const response = await fetch("/api/gemini/advisor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ generalQuestion: userMsg }),
+        body: JSON.stringify({ generalQuestion: userMsg, activeAlgoId }),
       });
       const data = await response.json();
       if (data.success && data.advice) {

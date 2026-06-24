@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { OSRSItem, PortfolioItem, PriceAlert } from "./types";
+import { OSRSItem, PortfolioItem, PriceAlert, TradingAlgoId } from "./types";
 import LiveScanner from "./components/LiveScanner";
 import ItemDetails from "./components/ItemDetails";
 import Portfolio from "./components/Portfolio";
@@ -20,6 +20,17 @@ export default function App() {
 
   // Sound Toggle state
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Active strategy and customizable consensus weights
+  const [activeAlgoId, setActiveAlgoId] = useState<TradingAlgoId>("momentum");
+  const [customWeights, setCustomWeights] = useState<Record<string, number>>({
+    momentum: 1,
+    reversion: 1,
+    volume: 1,
+    seasonal: 1,
+    lurker: 1,
+    arbitrage: 1,
+  });
 
   // Persisted local storage entities
   const [starredIds, setStarredIds] = useState<number[]>(() => {
@@ -361,10 +372,19 @@ export default function App() {
                     selectedItemId={selectedItem ? selectedItem.id : null}
                     starredIds={starredIds}
                     onToggleStar={handleToggleStar}
+                    activeAlgoId={activeAlgoId}
+                    setActiveAlgoId={setActiveAlgoId}
+                    customWeights={customWeights}
+                    setCustomWeights={setCustomWeights}
                   />
                 </div>
                 <div className="lg:col-span-5 h-[calc(100vh-210px)] min-h-[500px]">
-                  <ItemDetails item={selectedItem} onAddToPortfolio={handleAddToPortfolio} />
+                  <ItemDetails 
+                    item={selectedItem} 
+                    onAddToPortfolio={handleAddToPortfolio} 
+                    activeAlgoId={activeAlgoId}
+                    customWeights={customWeights}
+                  />
                 </div>
               </div>
             )}
@@ -383,7 +403,7 @@ export default function App() {
 
             {activeTab === "chat" && (
               <div className="h-[calc(100vh-210px)] min-h-[500px]">
-                <AdvisorChat />
+                <AdvisorChat activeAlgoId={activeAlgoId} />
               </div>
             )}
 

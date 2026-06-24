@@ -12,6 +12,18 @@ export interface OSRSItem {
   lowTime: number | null;
 }
 
+export type TradingAlgoId = 'momentum' | 'reversion' | 'volume' | 'seasonal' | 'lurker' | 'arbitrage' | 'ensemble';
+
+export interface TradingAlgo {
+  id: TradingAlgoId;
+  name: string;
+  emoji: string;
+  style: string;
+  description: string;
+  targetItems: string;
+  bestFor: string;
+}
+
 export interface ScoreBreakdown {
   margin: number;       // 0 - 30 max
   volume: number;       // 0 - 25 max

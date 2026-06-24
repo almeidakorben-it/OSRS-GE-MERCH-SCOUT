@@ -126,7 +126,7 @@ app.get("/api/ge/timeseries", async (req, res) => {
 
 // Server-side AI Advisor endpoint
 app.post("/api/gemini/advisor", async (req, res) => {
-  const { item, portfolio, generalQuestion } = req.body;
+  const { item, portfolio, generalQuestion, activeAlgoId } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey || apiKey === "MY_GEMINI_API_KEY") {
@@ -146,11 +146,21 @@ app.post("/api/gemini/advisor", async (req, res) => {
       },
     });
 
+    const algoDescription = {
+      momentum: "Momentum & Margin Hunter (looking at short-term price trend velocity and healthy margins)",
+      reversion: "Mean Reversion Raider (looking for items that are severely underpriced relative to their historical 30-day/90-day averages, predicting a price rebound to the mean)",
+      volume: "Volume Surge Vanguard (focusing on extreme breakout volume spikes where trading activity is 3x or higher than normal, predicting massive item demand shifts)",
+      seasonal: "Seasonal/Cyclic Harvester (playing the weekly cycles, weekend demand peaks, update preparations, or long-term seasonal event structures)",
+      lurker: "Low Volume High Margin Lurker (targeting rare collectibles/uniques with low trading velocity but massive absolute profit margin spreads, avoiding active competition)",
+      arbitrage: "Arbitrage Alchemist (looking for mathematical profit gaps in item combinations, processing recipes, or High Alchemy values compared to active market pricing)"
+    }[activeAlgoId as string] || "";
+
     let prompt = "";
     if (generalQuestion) {
       prompt = `You are the expert wise OSRS Grand Exchange merchant and master flipper. 
+The user is currently active with the following trading strategy: ${algoDescription || "General Flipping"}.
 A merchant asks you this trading question: "${generalQuestion}".
-Provide direct, highly tactical, experienced advice, utilizing realistic knowledge of the game (such as tax caps, buy limits resetting every 4 hours, and common high-volume staples vs heavy gear). Be concise, clear, and style the output in readable markdown.`;
+Provide direct, highly tactical, experienced advice tailored to their strategy, utilizing realistic knowledge of the game (such as tax caps, buy limits resetting every 4 hours, and common high-volume staples vs heavy gear). Be concise, clear, and style the output in readable markdown.`;
     } else if (item) {
       const tax = Math.floor(item.high * 0.01);
       const margin = item.high - item.low - tax;
@@ -163,7 +173,8 @@ Analyze this item for merchanting / flipping viability:
 - Approximate Tax (1%): ${tax} GP
 - Net Profit Margin: ${margin} GP
 
-Provide a direct, tactical flipping recommendation (Buy price target, sell target, risk assessment, holding time, volume dynamics, common uses in skilling or PvM). Be concise, clear, and style with beautiful, readable markdown. Limit the response to 200 words.`;
+The user is currently evaluating this item under the following strategy: ${algoDescription || "General Flipping/Scouting"}.
+Provide a direct, tactical flipping recommendation tailored to this specific strategy (Buy price target, sell target, risk assessment, holding time, volume dynamics, common uses in skilling or PvM). Be concise, clear, and style with beautiful, readable markdown. Limit the response to 200 words.`;
     } else if (portfolio) {
       prompt = `You are the expert OSRS Grand Exchange merchant advisor.
 Analyze the user's active flipping portfolio:

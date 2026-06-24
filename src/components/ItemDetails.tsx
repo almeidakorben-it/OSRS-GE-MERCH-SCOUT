@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { OSRSItem, HistoricalPricePoint } from "../types";
+import { OSRSItem, HistoricalPricePoint, TradingAlgoId } from "../types";
 import { gradeOSRSDeal, calculateOSTax, calculateTimeseriesStats } from "../utils/algo";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { Shield, TrendingUp, AlertTriangle, Calculator, Sparkles, Scale, DollarSign, Activity, HelpCircle } from "lucide-react";
@@ -7,9 +7,11 @@ import { Shield, TrendingUp, AlertTriangle, Calculator, Sparkles, Scale, DollarS
 interface ItemDetailsProps {
   item: OSRSItem | null;
   onAddToPortfolio: (itemId: number, name: string, price: number, quantity: number, target: number) => void;
+  activeAlgoId?: TradingAlgoId;
+  customWeights?: Record<string, number>;
 }
 
-export default function ItemDetails({ item, onAddToPortfolio }: ItemDetailsProps) {
+export default function ItemDetails({ item, onAddToPortfolio, activeAlgoId = "momentum", customWeights }: ItemDetailsProps) {
   const [timestep, setTimestep] = useState<"5m" | "1h" | "6h" | "24h">("1h");
   const [history, setHistory] = useState<HistoricalPricePoint[]>([]);
   const [stats, setStats] = useState<{ momentum: number; volatility: number; ratio30d: number } | null>(null);
@@ -102,8 +104,18 @@ export default function ItemDetails({ item, onAddToPortfolio }: ItemDetailsProps
   }
 
   // Live scoring based on calculated parameters
-  const deal = gradeOSRSDeal(item, stats || undefined);
+  const deal = gradeOSRSDeal(item, stats || undefined, activeAlgoId, customWeights);
   const score = deal.scoreBreakdown.total;
+
+  const algoName = {
+    momentum: "Momentum",
+    reversion: "Mean Reversion",
+    volume: "Volume Surge",
+    seasonal: "Seasonal Cycle",
+    lurker: "Lurker Margin",
+    arbitrage: "Alchemist Gap",
+    ensemble: "Ensemble Consensus"
+  }[activeAlgoId] || "Momentum";
 
   // Real-time calculation math
   const grossProfitPerUnit = Math.max(0, inputSellPrice - inputBuyPrice);
@@ -204,7 +216,7 @@ export default function ItemDetails({ item, onAddToPortfolio }: ItemDetailsProps
         {/* Big Combined Score Gauge */}
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end text-right">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Momentum Score</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{algoName} Score</span>
             <span className="text-[9px] text-slate-600">Algorithmic Grade</span>
           </div>
           <div className="relative flex items-center justify-center h-14 w-14 rounded-xl bg-slate-950 border border-slate-800 shadow-md">
