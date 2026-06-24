@@ -25,7 +25,7 @@ Perfect for active flippers, merchants tracking meta shifts, and data-driven pla
 - **Categorized Views** — High-volume staples, mid-tier, and high-margin rares.
 
 ### Popular Flip Categories (mid-2026)
-Ammo (arrows/darts/bolts), runes, hides, bones, potions, ornament kits, and high-demand skilling/PvM supplies.
+Ammo (arrows/darts/bolts), runes, hides, bones, potions, ornament kits, and high-demand skilling/PvM supplies
 
 > **Always verify current margins** on [GE Tracker](https://www.ge-tracker.com/), [Flipping.gg](https://flipping.gg/), or [prices.runescape.wiki](https://prices.runescape.wiki/).
 
