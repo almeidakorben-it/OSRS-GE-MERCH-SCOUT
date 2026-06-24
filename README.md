@@ -144,7 +144,22 @@ In addition to the default **Merch Momentum + Margin Hunter**, the tool supports
 
 ## APIs & Data Sources
 
-*(Keep your existing API section here)*
+### 1. Official / Best Real-Time API (Recommended)
+- **Base**: `https://prices.runescape.wiki/api/v1/osrs`
+- **Source**: OSRS Wiki + RuneLite partnership (highly reliable).
+
+**Key Endpoints**:
+- Latest prices: [`/latest`](https://prices.runescape.wiki/api/v1/osrs/latest)
+- Item mapping: [`/mapping`](https://prices.runescape.wiki/api/v1/osrs/mapping)
+- Timeseries: [`/timeseries?timestep=1h&id=1289`](https://prices.runescape.wiki/api/v1/osrs/timeseries?timestep=1h&id=1289)  
+  (timesteps: `5m`, `1h`, `6h`, `24h`, etc.)
+
+### 2. Weird Gloop API (Excellent historical data)
+- Base: `https://api.weirdgloop.org/`
+- Example: `https://api.weirdgloop.org/exchange/history/osrs/all?id=ITEM_ID`
+
+### 3. Official Jagex GE Page
+- [https://secure.runescape.com/m=itemdb_oldschool/](https://secure.runescape.com/m=itemdb_oldschool/) — Top risers/fallers, most traded.
 
 ---
 
