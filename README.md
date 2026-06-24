@@ -31,7 +31,7 @@ Ammo (arrows/darts/bolts), runes, hides, bones, potions, ornament kits, and high
 
 ---
 
-## 📊 Default Trading Algorithm: Merch Momentum + Margin Hunter (v1.0)
+## [Default] Trading Algorithm: Merch Momentum + Margin Hunter (v1.0)
 
 Combines momentum, margin hunting, and technical analysis.
 
