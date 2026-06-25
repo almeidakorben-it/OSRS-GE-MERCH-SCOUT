@@ -22,7 +22,7 @@ Perfect for active flippers, merchants tracking meta shifts, and data-driven pla
 - **Risk Meter** — Scores liquidity, competition, and manipulation risk.
 - **Alerts** — Notifications for high margins, volume surges, and sudden dips.
 - **Portfolio Tracker** — Logs flips, tracks P/L, and suggests cash-out timing.
-- **Categorized Views** — High-volume staples, mid-tier, and high-margin rares.
+- **Categorized Views** — High-volume staples, mid-tier, and high-margin rares
 
 ### Popular Flip Categories (mid-2026)
 Ammo (arrows/darts/bolts), runes, hides, bones, potions, ornament kits, and high-demand skilling/PvM supplies.
